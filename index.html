@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学玩吃在华中大 - 小程序介绍</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/scrollreveal"></script>
+
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2E7D32',     // 主绿色
+            secondary: '#4CAF50',   // 辅助绿色
+            accent: '#81C784',      // 强调色
+            dark: '#1B5E20',        // 深绿色
+            pink: '#F06292',        // 收藏按钮颜色
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'bounce-slow': 'bounce 3s infinite',
+            'fade-in-up': 'fadeInUp 0.8s ease-out',
+            'fade-in-down': 'fadeInDown 0.8s ease-out',
+            'fade-in-left': 'fadeInLeft 0.8s ease-out',
+            'fade-in-right': 'fadeInRight 0.8s ease-out',
+            'scale-in': 'scaleIn 0.5s ease-out',
+          }
+        },
+      }
+    }
+  </script>
+
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+      }
+      .star-rating {
+        color: #FFC107;
+      }
+      .gradient-bg {
+        background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+      }
+      .section-padding {
+        padding: 4rem 0;
+      }
+      .btn-primary {
+        @apply bg-primary hover:bg-dark text-white font-medium py-3 px-6 rounded-full transition-all duration-300 shadow-lg;
+      }
+      .btn-secondary {
+        @apply bg-white text-primary hover:bg-gray-100 font-medium py-3 px-6 rounded-full transition-all duration-300 shadow-lg;
+      }
+      
+      /* 自定义动画 */
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+      }
+      
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      
+      /* 加载动画 */
+      .loading-dots {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .loading-dots div {
+        position: absolute;
+        top: 33px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: #4CAF50;
+        animation-timing-function: cubic-bezier(0, 1, 1, 0);
+      }
+      .loading-dots div:nth-child(1) {
+        left: 8px;
+        animation: loading-dots1 0.6s infinite;
+      }
+      .loading-dots div:nth-child(2) {
+        left: 8px;
+        animation: loading-dots2 0.6s infinite;
+      }
+      .loading-dots div:nth-child(3) {
+        left: 32px;
+        animation: loading-dots2 0.6s infinite;
+      }
+      .loading-dots div:nth-child(4) {
+        left: 56px;
+        animation: loading-dots3 0.6s infinite;
+      }
+      @keyframes loading-dots1 {
+        0% { transform: scale(0); }
+        100% { transform: scale(1); }
+      }
+      @keyframes loading-dots3 {
+        0% { transform: scale(1); }
+        100% { transform: scale(0); }
+      }
+      @keyframes loading-dots2 {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(24px, 0); }
+      }
+      
+      /* 粒子效果 */
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        opacity: 0;
+      }
+      
+      /* 打字机效果 */
+      .typewriter {
+        overflow: hidden;
+        border-right: .15em solid #4CAF50;
+        white-space: nowrap;
+        margin: 0 auto;
+        animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+      }
+      
+      @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+      }
+      
+      @keyframes blink-caret {
+        from, to { border-color: transparent }
+        50% { border-color: #4CAF50; }
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-green-50 to-green-100 min-h-screen overflow-x-hidden">
+  <!-- 加载动画 -->
+  <div id="loading"
+    class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+    <div class="loading-dots mb-8">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <p class="text-primary font-medium text-lg animate-pulse">正在加载...</p>
+  </div>
+
+  <!-- 顶部横幅 -->
+  <header class="relative overflow-hidden gradient-bg">
+    <div id="particles-container" class="absolute inset-0"></div>
+    <div class="absolute inset-0 opacity-10">
+      <div
+        class="absolute top-0 left-0 w-72 h-72 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 opacity-20 animate-pulse-slow">
+      </div>
+      <div
+        class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2 opacity-20 animate-pulse-slow">
+      </div>
+    </div>
+    <div class="container mx-auto px-4 py-16 relative z-10 text-center">
+      <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-white text-shadow mb-4 animate-fade-in-down">
+        学玩吃在华中大
+      </h1>
+      <p class="text-[clamp(1rem,2vw,1.25rem)] text-white/90 max-w-2xl mx-auto mb-8">
+        一站式校园生活服务，让学习、娱乐与美食触手可及
+      </p>
+
+      <!-- 直接显示二维码，无需JavaScript -->
+      <div class="mt-8">
+        <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-6 inline-block">
+          <h3 class="text-white text-lg font-medium mb-4">扫描二维码体验小程序</h3>
+          <div class="bg-white p-4 rounded-xl shadow-lg">
+            <img src="images\1.jpg" alt="小程序二维码" class="mx-auto w-48 h-48">
+            <p class="text-gray-600 text-sm mt-3">使用微信扫描二维码</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 特色功能区 -->
+  <section class="section-padding">
+    <div class="container mx-auto px-4">
+      <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-center text-primary mb-4 animate-fade-in-down">
+        特色功能
+      </h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12 animate-fade-in-up">
+        专为华中大学子打造的校园生活助手，涵盖学习、娱乐、美食三大核心场景
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- 学习功能卡片 -->
+        <div class="bg-white rounded-xl shadow-lg p-6 card-hover border border-green-100 animate-fade-in-left">
+          <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-6 animate-float">
+            <i class="fa fa-book text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800">学习场所推荐</h3>
+          <p class="text-gray-600 mb-4">
+            精选东十二教学楼、图书馆等优质自习地点，标注环境特点和空闲情况，让你高效学习。
+          </p>
+          <ul class="text-sm text-gray-500 space-y-1">
+            <li class="flex items-center">
+              <i class="fa fa-check text-secondary mr-2"></i>
+              <span>具体位置信息</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fa fa-check text-secondary mr-2"></i>
+              <span>环境评分评价</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fa fa-check text-secondary mr-2"></i>
+              <span>查看地点详情</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 娱乐功能卡片 -->
+        <div class="bg-white rounded-xl shadow-lg p-6 card-hover border border-green-100 animate-scale-in">
+          <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-6 animate-float"
+            style="animation-delay: 0.2s">
+            <i class="fa fa-gamepad text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800">娱乐活动查询</h3>
+          <p class="text-gray-600 mb-4">
+            聚合校园周边娱乐场所和活动信息，轻松规划课余生活，不错过任何精彩。
+          </p>
+          <ul class="text-sm text-gray-500 space-y-1">
+            <li class="flex items-center">
+              <i class="fa fa-check text-secondary mr-2"></i>
+              <span>场所位置信息</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fa fa-check text-secondary mr-2"></i>
+              <span>场所评分评价</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fa fa-check text-secondary mr-2"></i>
+              <span>查看场所详情</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 美食功能卡片 -->
+        <div class="bg-white rounded-xl shadow-lg p-6 card-hover border border-green-100 animate-fade-in-right">
+          <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-6 animate-float"
+            style="animation-delay: 0.4s">
+            <i class="fa fa-cutlery text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800">美食推荐导览</h3>
+          <p class="text-gray-600 mb-4">
+            校内食堂、周边美食一网打尽，按评分和评论排序，帮你找到心仪餐厅。
+          </p>
+          <ul class="text-sm text-gray-500 space-y-1">
+            <li class="flex items-center">
+              <i class="fa fa-check text-secondary mr-2"></i>
+              <span>美食种类一览</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fa fa-check text-secondary mr-2"></i>
+              <span>餐厅评分评价</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fa fa-check text-secondary mr-2"></i>
+              <span>查看菜品详情</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 界面展示区 -->
+  <section class="section-padding bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-center text-primary mb-4 animate-fade-in-down">
+        界面展示
+      </h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12 animate-fade-in-up">
+        直观友好的用户界面，让校园生活更便捷
+      </p>
+
+      <div class="flex flex-col lg:flex-row items-center gap-12">
+        <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
+          <div class="bg-gradient-to-r from-primary to-secondary p-6 text-white">
+            <div class="flex items-center justify-center">
+              <h3 class="text-xl font-bold">学玩吃在华中大</h3>
+              <div class="flex items-center absolute right-0">
+                <i class="fa fa-ellipsis-v mr-4"></i>
+                <i class="fa fa-location-arrow"></i>
+              </div>
+            </div>
+
+            <div class="mt-4 relative">
+              <input type="text" placeholder="搜索地点..."
+                class="w-full py-3 px-4 rounded-full bg-white/20 backdrop-blur-sm text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50">
+              <button class="absolute right-3 top-3 text-white">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <div class="flex justify-around mb-6">
+              <button class="category-btn active w-20 h-20 rounded-full flex flex-col items-center justify-center">
+                <i class="fa fa-book text-xl mb-2"></i>
+                <span>学习</span>
+              </button>
+              <button class="category-btn w-20 h-20 rounded-full flex flex-col items-center justify-center">
+                <i class="fa fa-gamepad text-xl mb-2"></i>
+                <span>娱乐</span>
+              </button>
+              <button class="category-btn w-20 h-20 rounded-full flex flex-col items-center justify-center">
+                <i class="fa fa-cutlery text-xl mb-2"></i>
+                <span>美食</span>
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between bg-gray-50 p-4 rounded-lg mb-6">
+              <i class="fa fa-home text-green-500 mr-3"></i>
+              <span>我的位置：</span>
+              <div class="flex items-center">
+                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">东校区</span>
+                <i class="fa fa-chevron-down ml-1 text-green-500"></i>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-bold text-lg">热门推荐</h3>
+              <a href="#" class="text-green-500 hover:text-primary text-sm">更多 ></a>
+            </div>
+
+            <div class="space-y-4">
+              <div class="bg-white p-4 rounded-lg shadow">
+                <div class="flex justify-between items-start">
+                  <h4 class="font-bold text-xl">东十二教学楼</h4>
+                  <div class="flex items-center">
+                    <span class="bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded-full">东</span>
+                    <span class="bg-purple-600 text-white text-xs px-3 py-1 rounded-full ml-2">自习室</span>
+                  </div>
+                </div>
+                <p class="text-gray-600 mt-2">环境安静，空教室较多。</p>
+                <div class="flex items-center mt-3">
+                  <i class="fa fa-star star-rating"></i>
+                  <span class="font-bold text-lg ml-1">5</span>
+                  <span class="text-gray-500 ml-2">· 2条评价</span>
+                  <a href="#" class="ml-auto text-green-500 hover:text-primary text-sm">查看详情 ></a>
+                </div>
+              </div>
+
+              <div class="bg-white p-4 rounded-lg shadow">
+                <div class="flex justify-between items-start">
+                  <h4 class="font-bold text-xl">图书馆东区分馆</h4>
+                  <div class="flex items-center">
+                    <span class="bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded-full">东</span>
+                    <span class="bg-purple-600 text-white text-xs px-3 py-1 rounded-full ml-2">图书馆</span>
+                  </div>
+                </div>
+                <p class="text-gray-600 mt-2">宽敞明亮，空调开放，适合长时间学习。提供大量自习座位，环境安静。</p>
+                <div class="flex items-center mt-3">
+                  <i class="fa fa-star star-rating"></i>
+                  <span class="font-bold text-lg ml-1">4.3</span>
+                  <span class="text-gray-500 ml-2">· 0条评价</span>
+                  <a href="#" class="ml-auto text-green-500 hover:text-primary text-sm">查看详情 ></a>
+                </div>
+              </div>
+
+              <div class="bg-white p-4 rounded-lg shadow">
+                <div class="flex justify-between items-start">
+                  <h4 class="font-bold text-xl">光电国家实验室</h4>
+                  <div class="flex items-center">
+                    <span class="bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded-full">东</span>
+                    <span class="bg-purple-600 text-white text-xs px-3 py-1 rounded-full ml-2">实验室</span>
+                  </div>
+                </div>
+                <p class="text-gray-600 mt-2">先进的科研设备，适合做实验和科研工作。导师团队专业，学习氛围浓厚。</p>
+                <div class="flex items-center mt-3">
+                  <i class="fa fa-star star-rating"></i>
+                  <span class="font-bold text-lg ml-1">4.8</span>
+                  <span class="text-gray-500 ml-2">· 3条评价</span>
+                  <a href="#" class="ml-auto text-green-500 hover:text-primary text-sm">查看详情 ></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-1/2">
+          <h3 class="text-2xl font-bold mb-4 text-gray-800 text-center">界面设计特色</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-th-large text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">卡片式布局设计</h4>
+              <p class="text-gray-600">采用现代化的卡片式布局，信息层次清晰，视觉体验舒适，操作简单直观。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-map-marker text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">智能位置切换</h4>
+              <p class="text-gray-600">支持东、中、西三个校区切换和实时定位，快速找到你所在校区的学习、娱乐、美食资源。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-search text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">智能搜索功能</h4>
+              <p class="text-gray-600">强大的搜索系统，支持关键词、标签、分类搜索，快速定位你需要的地点信息。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-star text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">热门推荐</h4>
+              <p class="text-gray-600">汇集校园内备受好评的学习场所、娱乐地点和美食餐厅，品质有保障。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 详细信息展示区 -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-center text-primary mb-4 animate-fade-in-down">
+        详细信息展示
+      </h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12 animate-fade-in-up">
+        深入了解每个地点的详细信息，包括环境特点、用户评价和实用功能
+      </p>
+
+      <div class="flex flex-col lg:flex-row items-center gap-12">
+        <div class="w-full lg:w-1/2">
+          <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-green-100">
+            <!-- 绿色头部区域 -->
+            <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 text-white">
+              <div class="flex items-center justify-center">
+                <a href="#" class="mr-4 p-2 hover:bg-green-500 rounded-full transition-colors">
+                  <i class="fa fa-chevron-left"></i>
+                </a>
+                <h3 class="text-xl font-bold">东十二教学楼</h3>
+              </div>
+            </div>
+
+            <!-- 图片区域 -->
+            <div class="relative">
+              <img src="images\3.jpg" alt="东十二教学楼" class="w-full h-48 object-cover">
+              <div class="absolute top-4 left-4 bg-green-500 text-white text-sm px-3 py-1 rounded-full font-medium">东校区
+              </div>
+              <div
+                class="absolute top-4 right-4 bg-white/90 text-green-700 text-sm px-3 py-1 rounded-full backdrop-blur-sm font-medium">
+                自习室,安静,学习,看书</div>
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="p-6">
+              <!-- 地点名称和评分 -->
+              <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold text-green-600 mb-2">东十二教学楼</h3>
+                <div class="flex items-center justify-center">
+                  <div class="flex mr-2">
+                    <i class="fa fa-star star-rating"></i>
+                    <i class="fa fa-star star-rating"></i>
+                    <i class="fa fa-star star-rating"></i>
+                    <i class="fa fa-star star-rating"></i>
+                    <i class="fa fa-star star-rating"></i>
+                  </div>
+                  <span class="text-gray-600">(1条评价)</span>
+                </div>
+              </div>
+
+              <div class="mb-8">
+                <button
+                  class="w-full py-3 bg-[#F06292] hover:bg-[#ec407a] text-white rounded-full font-medium transition-all duration-300 flex items-center justify-center shadow-md">
+                  <i class="fa fa-heart mr-2"></i> 收藏
+                </button>
+              </div>
+
+              <!-- 地点介绍 -->
+              <div class="mb-8">
+                <h4 class="font-bold text-lg mb-4 text-gray-800">地点介绍</h4>
+                <div class="p-4 bg-green-50 rounded-lg border border-green-100">
+                  <p class="text-gray-700">环境安静，空教室较多。</p>
+                </div>
+              </div>
+
+              <!-- 用户评价 -->
+              <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                  <h4 class="font-bold text-lg text-gray-800">用户评价 (1)</h4>
+                  <a href="#" class="text-green-500 hover:text-green-600 font-medium text-sm flex items-center">
+                    写评价 <i class="fa fa-chevron-right ml-1 text-xs"></i>
+                  </a>
+                </div>
+
+                <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <div class="flex items-center mb-3">
+                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                      <i class="fa fa-user text-green-600"></i>
+                    </div>
+                    <div>
+                      <div class="font-medium text-gray-800">微信用户</div>
+                      <div class="text-xs text-gray-500">2023-10-15</div>
+                    </div>
+                  </div>
+                  <div class="flex mb-2">
+                    <i class="fa fa-star star-rating"></i>
+                    <i class="fa fa-star star-rating"></i>
+                    <i class="fa fa-star star-rating"></i>
+                    <i class="fa fa-star star-rating"></i>
+                    <i class="fa fa-star star-rating"></i>
+                  </div>
+                  <p class="text-gray-600">座位舒服，环境安静，好评！</p>
+                </div>
+              </div>
+
+              <!-- 操作按钮 -->
+              <div class="flex gap-4">
+                <button
+                  class="flex-1 py-3 border border-gray-300 rounded-full font-medium hover:bg-gray-50 transition-all duration-300 flex items-center justify-center">
+                  <i class="fa fa-share-alt mr-2"></i> 分享
+                </button>
+                <button
+                  class="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white rounded-full font-medium transition-all duration-300 flex items-center justify-center">
+                  <i class="fa fa-pencil mr-2"></i> 写评价
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-1/2">
+          <h3 class="text-2xl font-bold mb-6 text-gray-800 text-center">详细信息功能特色</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-info-circle text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">全面信息展示</h4>
+              <p class="text-gray-600">每个地点都有详细的介绍、评分、用户评价和实用标签，让你全面了解场所特点。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-star text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">真实用户评价</h4>
+              <p class="text-gray-600">查看其他同学的真实评价和评分，帮助你做出更好的选择，避免踩坑。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-heart text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">个性化收藏</h4>
+              <p class="text-gray-600">一键收藏心仪地点，建立个人专属的学习、娱乐、美食地图，方便随时查看。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-share-alt text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">便捷分享功能</h4>
+              <p class="text-gray-600">轻松分享优质地点给同学朋友，一起发现校园里的宝藏场所。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 评价功能区 -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-center text-primary mb-4 animate-fade-in-down">
+        评价功能
+      </h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12 animate-fade-in-up">
+        分享你的真实体验，帮助更多同学做出更好的选择
+      </p>
+
+      <div class="flex flex-col lg:flex-row items-center gap-12">
+        <div class="w-full lg:w-1/2">
+          <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-green-100">
+            <!-- 头部导航 -->
+            <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 text-white">
+              <div class="flex items-center justify-center">
+                <a href="#" class="mr-4 p-2 hover:bg-green-500 rounded-full transition-colors">
+                  <i class="fa fa-chevron-left"></i>
+                </a>
+                <h3 class="text-xl font-bold">评价 东十二教学楼</h3>
+              </div>
+            </div>
+
+            <!-- 主体内容 -->
+            <div class="p-6">
+              <!-- 地点名称 -->
+              <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold text-green-600 mb-2">东十二教学楼</h3>
+                <p class="text-gray-500">请分享您的真实体验</p>
+              </div>
+
+              <!-- 评分区域 -->
+              <div class="mb-8">
+                <h4 class="font-bold text-lg mb-4 text-gray-800">评分</h4>
+                <div class="flex flex-col items-center">
+                  <div class="flex space-x-2 mb-3" id="starRating">
+                    <i class="fa fa-star text-3xl cursor-pointer transition-transform hover:scale-110"
+                      data-rating="1"></i>
+                    <i class="fa fa-star text-3xl cursor-pointer transition-transform hover:scale-110"
+                      data-rating="2"></i>
+                    <i class="fa fa-star text-3xl cursor-pointer transition-transform hover:scale-110"
+                      data-rating="3"></i>
+                    <i class="fa fa-star text-3xl cursor-pointer transition-transform hover:scale-110"
+                      data-rating="4"></i>
+                    <i class="fa fa-star text-3xl cursor-pointer transition-transform hover:scale-110"
+                      data-rating="5"></i>
+                  </div>
+                  <div class="text-xl font-bold text-gray-700" id="ratingText">请选择评分</div>
+                </div>
+              </div>
+
+              <!-- 评价内容 -->
+              <div class="mb-6">
+                <h4 class="font-bold text-lg mb-3 text-gray-800">评价内容</h4>
+                <textarea
+                  class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  rows="5" placeholder="分享你的体验吧～(至少10个字)" id="reviewText"></textarea>
+                <div class="flex justify-between text-sm mt-2">
+                  <span class="text-gray-500">至少10个字符</span>
+                  <span class="text-gray-500"><span id="charCount">0</span>/500</span>
+                </div>
+              </div>
+
+              <!-- 提示信息 -->
+              <div class="p-4 bg-yellow-50 rounded-lg mb-6 border border-yellow-200">
+                <div class="flex items-start">
+                  <i class="fa fa-lightbulb-o text-yellow-500 text-lg mt-0.5 mr-3"></i>
+                  <p class="text-yellow-700">真诚的评价能帮助更多同学～请基于真实体验进行评价</p>
+                </div>
+              </div>
+
+              <!-- 操作按钮 -->
+              <div class="flex gap-4">
+                <button
+                  class="flex-1 py-3 border border-gray-300 rounded-full font-medium hover:bg-gray-50 transition-all duration-300">
+                  取消
+                </button>
+                <button
+                  class="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white rounded-full font-medium transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  id="submitBtn" disabled>
+                  提交评价
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-1/2">
+          <h3 class="text-2xl font-bold mb-4 text-gray-800 text-center">评价系统特色</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-star-half-o text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">五星评分系统</h4>
+              <p class="text-gray-600">采用直观的五星评分制，从环境、设施、氛围等多个维度进行评价，结果更加客观准确。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-pencil text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">详细文字评价</h4>
+              <p class="text-gray-600">支持详细的文字描述，分享具体的使用体验和实用建议，为其他同学提供有价值的参考。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-shield text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">真实可信的评价</h4>
+              <p class="text-gray-600">所有评价均来自真实用户，系统会过滤虚假信息，确保评价内容的真实性和可靠性。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-comments text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">互动交流平台</h4>
+              <p class="text-gray-600">通过评价系统建立同学间的交流平台，分享经验、解答疑问，共同打造更好的校园生活环境。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 个人中心功能区 -->
+  <section class="section-padding">
+    <div class="container mx-auto px-4">
+      <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-center text-primary mb-4 animate-fade-in-down">
+        个人中心功能
+      </h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12 animate-fade-in-up">
+        个性化设置与管理，打造专属的校园生活体验
+      </p>
+
+      <div class="flex flex-col lg:flex-row items-center gap-12">
+        <div class="w-full lg:w-1/2">
+          <div
+            class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-green-100 animate-scale-in">
+            <div class="bg-gradient-to-r from-primary to-secondary p-6 text-white">
+              <div class="flex items-center">
+                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mr-4">
+                  <i class="fa fa-user text-2xl"></i>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-xl font-bold">微信用户</h3>
+                  <p class="text-sm opacity-90">ID: xxxxxxxxx</p>
+                </div>
+                <button
+                  class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full text-sm transition-all duration-300">
+                  退出登录
+                </button>
+              </div>
+            </div>
+
+            <div class="p-6">
+              <div class="grid grid-cols-3 gap-4 text-center mb-8">
+                <div
+                  class="bg-green-50 p-4 rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer">
+                  <div class="text-2xl font-bold text-green-500">0</div>
+                  <div class="text-sm text-gray-600">我的评价</div>
+                </div>
+                <div
+                  class="bg-green-50 p-4 rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer">
+                  <div class="text-2xl font-bold text-green-500">0</div>
+                  <div class="text-sm text-gray-600">我的收藏</div>
+                </div>
+                <div
+                  class="bg-green-50 p-4 rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer">
+                  <div class="text-2xl font-bold text-green-500">1</div>
+                  <div class="text-sm text-gray-600">浏览历史</div>
+                </div>
+              </div>
+
+              <div class="space-y-6">
+                <div class="animate-fade-in-left">
+                  <h4 class="font-bold text-lg mb-3 flex items-center text-gray-800">
+                    <i class="fa fa-cog text-green-500 mr-2"></i> 设置
+                  </h4>
+                  <div class="space-y-2">
+                    <div
+                      class="p-4 bg-gray-50 rounded-lg border border-gray-200 flex justify-between items-center hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                      <div class="flex items-center">
+                        <i class="fa fa-map-marker text-green-500 mr-3"></i>
+                        <span class="text-gray-700">位置偏好</span>
+                      </div>
+                      <!-- 在右侧容器上添加固定宽度 -->
+                      <div class="flex items-center w-20 justify-end">
+                        <span class="text-green-500 mr-2 font-medium">东校区</span>
+                        <i class="fa fa-chevron-right text-gray-400"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="animate-fade-in-left" style="animation-delay: 0.1s">
+                  <h4 class="font-bold text-lg mb-3 flex items-center text-gray-800">
+                    <i class="fa fa-wrench text-green-500 mr-2"></i> 功能
+                  </h4>
+                  <div class="space-y-2">
+                    <div
+                      class="p-4 bg-gray-50 rounded-lg border border-gray-200 flex justify-between items-center hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                      <div class="flex items-center">
+                        <i class="fa fa-file-text-o text-green-500 mr-3"></i>
+                        <span class="text-gray-700">我的评价</span>
+                      </div>
+                      <i class="fa fa-chevron-right text-gray-400"></i>
+                    </div>
+                    <div
+                      class="p-4 bg-gray-50 rounded-lg border border-gray-200 flex justify-between items-center hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                      <div class="flex items-center">
+                        <i class="fa fa-heart text-green-500 mr-3"></i>
+                        <span class="text-gray-700">我的收藏</span>
+                      </div>
+                      <i class="fa fa-chevron-right text-gray-400"></i>
+                    </div>
+                    <div
+                      class="p-4 bg-gray-50 rounded-lg border border-gray-200 flex justify-between items-center hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                      <div class="flex items-center">
+                        <i class="fa fa-history text-green-500 mr-3"></i>
+                        <span class="text-gray-700">浏览历史</span>
+                      </div>
+
+                      <i class="fa fa-chevron-right text-gray-400"></i>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="animate-fade-in-left" style="animation-delay: 0.2s">
+                  <h4 class="font-bold text-lg mb-3 flex items-center text-gray-800">
+                    <i class="fa fa-archive text-green-500 mr-2"></i> 其他
+                  </h4>
+                  <div class="space-y-2">
+                    <div
+                      class="p-4 bg-gray-50 rounded-lg border border-gray-200 flex justify-between items-center hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                      <div class="flex items-center">
+                        <i class="fa fa-gift text-green-500 mr-3"></i>
+                        <span class="text-gray-700">关于我们</span>
+                      </div>
+                      <i class="fa fa-chevron-right text-gray-400"></i>
+                    </div>
+                    <div
+                      class="p-4 bg-gray-50 rounded-lg border border-gray-200 flex justify-between items-center hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                      <div class="flex items-center">
+                        <i class="fa fa-headphones text-green-500 mr-3"></i>
+                        <span class="text-gray-700">联系客服</span>
+                      </div>
+                      <i class="fa fa-chevron-right text-gray-400"></i>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-1/2">
+          <h3 class="text-2xl font-bold mb-4 text-gray-800 text-center">个人中心特色</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-user-circle text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">个性化账户管理</h4>
+              <p class="text-gray-600">完善的用户账户系统，支持个人信息管理、登录状态维护，确保使用安全便捷。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-heart text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">个人收藏管理</h4>
+              <p class="text-gray-600">集中管理所有收藏的地点，建立个人专属的校园生活地图，快速找到心仪场所。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-history text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">浏览历史记录</h4>
+              <p class="text-gray-600">自动记录浏览历史，方便回顾之前查看过的地点，不错过任何有价值的发现。</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-green-100">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fa fa-cogs text-green-600 text-xl"></i>
+              </div>
+              <h4 class="text-lg font-bold mb-2 text-gray-800">个性化设置</h4>
+              <p class="text-gray-600">丰富的个性化设置选项，包括位置偏好、通知设置等，让小程序更懂你的需求。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 底部区域 -->
+  <footer class="bg-primary text-white py-12">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-2xl font-bold mb-4 animate-fade-in-down">学玩吃在华中大</h2>
+      <p class="mb-6 max-w-md mx-auto animate-fade-in-up">华中大师生的校园生活好帮手，让校园生活更便捷、更精彩</p>
+      <div class="flex justify-center space-x-6 mb-6">
+        <a href="#" class="text-white hover:text-accent transition-all duration-300 text-2xl">
+          <i class="fa fa-weixin"></i>
+        </a>
+        <a href="#" class="text-white hover:text-accent transition-all duration-300 text-2xl">
+          <i class="fa fa-question-circle"></i>
+        </a>
+        <a href="#" class="text-white hover:text-accent transition-all duration-300 text-2xl">
+          <i class="fa fa-envelope"></i>
+        </a>
+      </div>
+      <p class="text-sm opacity-80 animate-fade-in-up">© 2025 学玩吃在华中大 版权所有</p>
+    </div>
+  </footer>
+
+  <script>
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function () {
+      // 隐藏加载动画
+      setTimeout(function () {
+        document.getElementById('loading').style.opacity = '0';
+        setTimeout(function () {
+          document.getElementById('loading').style.display = 'none';
+        }, 500);
+      }, 1500);
+
+      // 初始化ScrollReveal
+      ScrollReveal().reveal('.animate-fade-in-up', {
+        duration: 1000,
+        distance: '30px',
+        origin: 'bottom',
+        interval: 200
+      });
+
+      ScrollReveal().reveal('.animate-fade-in-down', {
+        duration: 1000,
+        distance: '30px',
+        origin: 'top',
+        interval: 200
+      });
+
+      ScrollReveal().reveal('.animate-fade-in-left', {
+        duration: 1000,
+        distance: '30px',
+        origin: 'left',
+        interval: 200
+      });
+
+      ScrollReveal().reveal('.animate-fade-in-right', {
+        duration: 1000,
+        distance: '30px',
+        origin: 'right',
+        interval: 200
+      });
+
+      ScrollReveal().reveal('.animate-scale-in', {
+        duration: 800,
+        scale: 0.9,
+        interval: 200
+      });
+
+      // 创建粒子效果
+      createParticles();
+    });
+
+    // 创建粒子效果函数
+    function createParticles() {
+      const container = document.getElementById('particles-container');
+      const particleCount = 30;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+
+        // 随机属性
+        const size = Math.random() * 5 + 2;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const delay = Math.random() * 10;
+        const duration = Math.random() * 10 + 10;
+
+        particle.style.cssText = `
+          width: ${size}px;
+          height: ${size}px;
+          left: ${posX}%;
+          top: ${posY}%;
+          background: rgba(255, 255, 255, ${Math.random() * 0.5});
+          animation: float ${duration}s ease-in-out ${delay}s infinite;
+        `;
+
+        container.appendChild(particle);
+      }
+    }
+
+    // 评价功能JavaScript
+    document.addEventListener('DOMContentLoaded', function () {
+      const stars = document.querySelectorAll('#starRating .fa-star');
+      const ratingText = document.getElementById('ratingText');
+      const reviewText = document.getElementById('reviewText');
+      const charCount = document.getElementById('charCount');
+      const submitBtn = document.getElementById('submitBtn');
+
+      let currentRating = 0;
+
+      // 星星评分功能
+      stars.forEach(star => {
+        star.addEventListener('click', function () {
+          const rating = parseInt(this.getAttribute('data-rating'));
+          currentRating = rating;
+          updateStars(rating);
+          ratingText.textContent = `${rating}分`;
+          ratingText.className = 'text-xl font-bold star-rating';
+          checkFormValidity();
+        });
+
+        star.addEventListener('mouseover', function () {
+          const hoverRating = parseInt(this.getAttribute('data-rating'));
+          updateStars(hoverRating, true);
+        });
+
+        star.addEventListener('mouseout', function () {
+          updateStars(currentRating);
+        });
+      });
+
+      // 更新星星显示
+      function updateStars(rating, isHover = false) {
+        stars.forEach(star => {
+          const starRating = parseInt(star.getAttribute('data-rating'));
+          if (starRating <= rating) {
+            star.className = `fa fa-star text-3xl cursor-pointer transition-colors ${isHover ? 'star-hover' : 'star-rating'}`;
+          } else {
+            star.className = 'fa fa-star text-3xl cursor-pointer transition-colors star-empty';
+          }
+        });
+      }
+
+      // 字符计数
+      reviewText.addEventListener('input', function () {
+        const count = this.value.length;
+        charCount.textContent = count;
+
+        if (count > 500) {
+          charCount.className = 'text-red-500';
+        } else if (count >= 10) {
+          charCount.className = 'text-green-500';
+        } else {
+          charCount.className = 'text-gray-500';
+        }
+
+        checkFormValidity();
+      });
+
+      // 检查表单有效性
+      function checkFormValidity() {
+        const isRatingValid = currentRating > 0;
+        const isReviewValid = reviewText.value.length >= 10 && reviewText.value.length <= 500;
+
+        submitBtn.disabled = !(isRatingValid && isReviewValid);
+      }
+
+      // 提交按钮点击事件
+      submitBtn.addEventListener('click', function () {
+        if (!this.disabled) {
+          // 这里可以添加提交评价的AJAX请求
+          alert('评价提交成功！感谢您的分享～');
+          // 重置表单
+          currentRating = 0;
+          updateStars(0);
+          ratingText.textContent = '请选择评分';
+          ratingText.className = 'text-xl font-bold text-gray-700';
+          reviewText.value = '';
+          charCount.textContent = '0';
+          charCount.className = 'text-gray-500';
+          submitBtn.disabled = true;
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
